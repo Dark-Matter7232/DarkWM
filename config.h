@@ -45,6 +45,11 @@ static Sp scratchpads[] = {
 	{"spranger",    spcmd2},
 };
 
+static const char *const autostart[] = {
+	"st", NULL,
+	NULL /* terminate */
+};
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -68,21 +73,17 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 #include "vanitygaps.c"
 static const Layout layouts[] = {
-	/* symbol     arrange function */
- 	{ "[]=",	tile },			/* Default: Master on left, slaves on right */
-	{ "TTT",	bstack },		/* Master on top, slaves on bottom */
-
-	{ "[@]",	spiral },		/* Fibonacci spiral */
-	{ "[\\]",	dwindle },		/* Decreasing in size right and leftward */
-
-	{ "H[]",	deck },			/* Master on left, slaves in monocle-like mode on right */
- 	{ "[M]",	monocle },		/* All windows on top of eachother */
-
-	{ "|M|",	centeredmaster },		/* Master in middle, slaves on sides */
-	{ ">M>",	centeredfloatingmaster },	/* Same but master floats */
-
-	{ "><>",	NULL },			/* no layout function means floating behavior */
-	{ NULL,		NULL },
+	/* symbol     	   arrange function */
+ 	{ "[T]", 	   tile },/*Master on left, slaves on right */
+	{ "[BS]", 	   bstack },/* Master on top, slaves on bottom */
+	{ "[FIB]",   spiral },/* Fibonacci spiral */
+	{ "[DWI]", 	   dwindle },/* Decreasing in size right and leftward */
+	{ "[DK]", 	   deck },/* Master left, slaves in monocle mode right */
+ 	{ "[MOC]", 	   monocle },/* All windows on top of eachother */
+	{ "[Cm]",    centeredmaster },/* Master in middle, slaves on sides */
+	{ "[CFm]",  centeredfloatingmaster }, /* Same but master floats */
+	{ "[Float]",    NULL },/* no layout function means floating behavior */
+	{  NULL,	   NULL },
 };
 
 /* key definitions */
