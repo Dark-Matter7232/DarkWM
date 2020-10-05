@@ -56,7 +56,7 @@ static const char *const autostart[] = {
 	"sh", "-c", "unclutter &", NULL,
 	"sh", "-c", "nm-applet &", NULL,
 	"sh", "-c", "sxhkd -m 1 &", NULL,
-	"sh", "-c", "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &", NULL,
+	"sh", "-c", "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)", NULL,
 	NULL /* terminate it */
 };
 
