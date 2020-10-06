@@ -1,5 +1,7 @@
 # Anurag's build of dwm based on Luke's build
-
+<p align="center">
+<a href="https://github.com/Dark-Matter7232/dwm"><img src="trash/cloc.png" height="492" width="702" alt="Archcraft"></a>
+</p>
 ## FAQ
 
 > What are the bindings?
@@ -24,6 +26,7 @@ I haven't kept `man dwm`/`dwm.1` updated though. PRs welcome on that, lol.
 - swallow patch: if a program run from a terminal would make it inoperable, it temporarily takes its place to save space.
 - Systray Icon support
 - Latest fixes directly merged from dwm-git master branch
+- Inbuilt Autostart function
 ## Please install `libxft-bgra`!
 
 This build of dwm does not block color emoji in the status/info bar, so you must install [libxft-bgra](https://aur.archlinux.org/packages/libxft-bgra/) from the AUR, which fixes a libxft color emoji rendering problem, otherwise dwm will crash upon trying to render one. Hopefully this fix will be in all libxft soon enough.
