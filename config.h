@@ -73,15 +73,15 @@ static const Rule rules[] = {
      *	WM_CLASS(STRING) = instance, class
      *	WM_NAME(STRING) = title
     */
-    /* class   									 instance              title       	                                                    tags mask           iscentered			 isfloating   	 isterminal       noswallow     monitor */
-    { "Gimp",     		   NULL,        NULL,       	    		     1 << 8,      0,           0,        0,         0,        -1 },
-    { NULL,        		   NULL,        "Microsoft Teams Notification",  0,           0,           1,        0,         0,        -1 },
-    {"Pavucontrol", 	   NULL,        NULL,       					 0,           1,           1,        0,		    0,		  -1 },
-    {"kdeconnect.daemon",  NULL,        NULL,        					 0,           1,           3,        0,		    0,		  -1 },
-    { TERMCLASS,   		   NULL,        NULL,       	    			 0,           0,           0,        1,         0,        -1 },
-    { NULL,       	       NULL,        "Event Tester",                  0,           0,           0,        0,         1,        -1 },
-    { NULL,      		   "spterm",    NULL,       	    			 SPTAG(0),    0,           1,        1,         0,        -1 },
-    { NULL,      		   "spcalc",    NULL,       	                 SPTAG(1),    0,           1,        1,         0,        -1 },
+    /* class   		     instance     title       	                    tags mask      iscentered   isfloating  isterminal  noswallow     monitor */
+    { "Gimp",                NULL,        NULL,       	    		     1 << 8,             0,           0,        0,         0,        -1 },
+    { NULL,                  NULL,        "Microsoft Teams Notification",    0,                  0,           1,        0,         0,        -1 },
+    {"Pavucontrol", 	     NULL,        NULL,       		             0,                  1,           1,        0,         0,	     -1 },
+    {"kdeconnect.daemon",    NULL,        NULL,                              0,                  1,           3,        0,         0,        -1 },
+    { TERMCLASS,             NULL,        NULL,       	    	             0,                  0,           0,        1,         0,        -1 },
+    { NULL,       	     NULL,        "Event Tester",                    0,                  0,           0,        0,         1,        -1 },
+    { NULL,                  "spterm",    NULL,       	    		     SPTAG(0),           0,           1,        1,         0,        -1 },
+    { NULL,                  "spcalc",    NULL,       	                     SPTAG(1),           0,           1,        1,         0,        -1 },
 };
 
 /* layout(s) */
