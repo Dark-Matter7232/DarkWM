@@ -46,7 +46,7 @@ static Sp scratchpads[] = {
 };
 
 static const char *const autostart[] = {
-	"sh", "-c", "mpd &", NULL,
+	// "sh", "-c", "mpd &", NULL,
 	"sh", "-c", "remaps &", NULL,
 	"sh", "-c", "setbg &", NULL,
 	"sh", "-c", "xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/Xresources &", NULL,
@@ -55,7 +55,7 @@ static const char *const autostart[] = {
 	"sh", "-c", "xset r rate 300 50 &", NULL,
 	"sh", "-c", "unclutter &", NULL,
 	"sh", "-c", "nm-applet &", NULL,
-	"sh", "-c", "sxhkd -m 1 &", NULL,
+	// "sh", "-c", "sxhkd -m 1 &", NULL,
 	"sh", "-c", "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)", NULL,
 	"sh", "-c", "numlockx &", NULL,
 	"sh", "-c", "mpv --volume=80 ~/.config/fixes/vistashutdown.ogv &", NULL, /*  add a starup chime cuz why not */
