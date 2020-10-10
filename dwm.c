@@ -35,7 +35,6 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
-#include <X11/Xresource.h>
 #include <X11/Xutil.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
@@ -68,21 +67,7 @@
 #define SPTAGMASK		(((1 << LENGTH(scratchpads))-1) << LENGTH(tags))
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
-#define XRDB_LOAD_COLOR(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
-                                  if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
-                                    int i = 1; \
-                                    for (; i <= 6; i++) { \
-                                      if (value.addr[i] < 48) break; \
-                                      if (value.addr[i] > 57 && value.addr[i] < 65) break; \
-                                      if (value.addr[i] > 70 && value.addr[i] < 97) break; \
-                                      if (value.addr[i] > 102) break; \
-                                    } \
-                                    if (i == 7) { \
-                                      strncpy(V, value.addr, 7); \
-                                      V[7] = '\0'; \
-                                    } \
-                                  } \
-                                }
+
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 
@@ -182,7 +167,7 @@ struct Monitor {
 	Monitor *next;
 	Window barwin;
 	const Layout *lt[2];
-	unsigned int alttag;	
+	// unsigned int alttag;	
 	Pertag *pertag;
 };
 
@@ -244,7 +229,7 @@ static void grabkeys(void);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
-static void loadxrdb(void);
+// static void loadxrdb(void);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -289,7 +274,7 @@ static Monitor *systraytomon(Monitor *m);
 static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
-static void togglealttag();
+// static void togglealttag();
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglescratch(const Arg *arg);
@@ -320,7 +305,7 @@ static Client *wintosystrayicon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
-static void xrdb(const Arg *arg);
+// static void xrdb(const Arg *arg);
 static void zoom(const Arg *arg);
 static void autostart_exec(void);
 
@@ -739,6 +724,7 @@ clientmessage(XEvent *e)
 	XSetWindowAttributes swa;
 	XClientMessageEvent *cme = &e->xclient;
 	Client *c = wintoclient(cme->window);
+	unsigned int i;
 
 	if (showsystray && cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
 		/* add systray icons */
@@ -794,8 +780,14 @@ clientmessage(XEvent *e)
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ && !c->isfullscreen)));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
-		if (c != selmon->sel && !c->isurgent)
-			seturgent(c, 1);
+		for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++); /* add focus shift */
+		if (i < LENGTH(tags)) {
+			const Arg a = {.ui = 1 << i};
+			selmon = c->mon;
+			view(&a);
+			focus(c);
+			restack(selmon);
+		}
 	}
 }
 
@@ -1013,8 +1005,8 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	// int x, w, tw = 0, stw = 0;
-	int x, w, wdelta, tw = 0, stw = 0;
+	int x, w, tw = 0, stw = 0;
+	// int x, w, wdelta, tw = 0, stw = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -1043,9 +1035,9 @@ drawbar(Monitor *m)
 		continue;
 
 		w = TEXTW(tags[i]);
-		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;		
+		// wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;		
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
@@ -1364,36 +1356,36 @@ killclient(const Arg *arg)
 	}
 }
 
-void
-loadxrdb()
-{
-  Display *display;
-  char * resm;
-  XrmDatabase xrdb;
-  char *type;
-  XrmValue value;
+// void
+// loadxrdb()
+// {
+//   Display *display;
+//   char * resm;
+//   XrmDatabase xrdb;
+//   char *type;
+//   XrmValue value;
 
-  display = XOpenDisplay(NULL);
+//   display = XOpenDisplay(NULL);
 
-  if (display != NULL) {
-    resm = XResourceManagerString(display);
+//   if (display != NULL) {
+//     resm = XResourceManagerString(display);
 
-    if (resm != NULL) {
-      xrdb = XrmGetStringDatabase(resm);
+//     if (resm != NULL) {
+//       xrdb = XrmGetStringDatabase(resm);
 
-      if (xrdb != NULL) {
-        XRDB_LOAD_COLOR("dwm.color0", normbordercolor);
-        XRDB_LOAD_COLOR("dwm.color8", selbordercolor);
-        XRDB_LOAD_COLOR("dwm.color0", normbgcolor);
-        XRDB_LOAD_COLOR("dwm.color4", normfgcolor);
-        XRDB_LOAD_COLOR("dwm.color0", selfgcolor);
-        XRDB_LOAD_COLOR("dwm.color4", selbgcolor);
-      }
-    }
-  }
+//       if (xrdb != NULL) {
+//         XRDB_LOAD_COLOR("dwm.color0", normbordercolor);
+//         XRDB_LOAD_COLOR("dwm.color8", selbordercolor);
+//         XRDB_LOAD_COLOR("dwm.color0", normbgcolor);
+//         XRDB_LOAD_COLOR("dwm.color4", normfgcolor);
+//         XRDB_LOAD_COLOR("dwm.color0", selfgcolor);
+//         XRDB_LOAD_COLOR("dwm.color4", selbgcolor);
+//       }
+//     }
+//   }
 
-  XCloseDisplay(display);
-}
+//   XCloseDisplay(display);
+// }
 
 void
 manage(Window w, XWindowAttributes *wa)
@@ -2257,12 +2249,12 @@ tagmon(const Arg *arg)
 	sendmon(selmon->sel, dirtomon(arg->i));
 }
 
-void
-togglealttag()
-{
-	selmon->alttag = !selmon->alttag;
-	drawbar(selmon);
-}
+// void
+// togglealttag()
+// {
+// 	selmon->alttag = !selmon->alttag;
+// 	drawbar(selmon);
+// }
 
 void
 togglebar(const Arg *arg)
@@ -3034,16 +3026,16 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 	return -1;
 }
 
-void
-xrdb(const Arg *arg)
-{
-  loadxrdb();
-  int i;
-  for (i = 0; i < LENGTH(colors); i++)
-                scheme[i] = drw_scm_create(drw, colors[i], 3);
-  focus(NULL);
-  arrange(NULL);
-}
+// void
+// xrdb(const Arg *arg)
+// {
+//   loadxrdb();
+//   int i;
+//   for (i = 0; i < LENGTH(colors); i++)
+//                 scheme[i] = drw_scm_create(drw, colors[i], 3);
+//   focus(NULL);
+//   arrange(NULL);
+// }
 
 Monitor *
 systraytomon(Monitor *m) {
@@ -3090,8 +3082,8 @@ main(int argc, char *argv[])
 		die("dwm: cannot get xcb connection\n");
 	checkotherwm();
 	    autostart_exec();
-        XrmInitialize();
-        loadxrdb();
+        // XrmInitialize();
+        // loadxrdb();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)

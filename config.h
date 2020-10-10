@@ -19,18 +19,23 @@ static const int swallowfloating    = 0;        /* 1 means swallow floating wind
 static const int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true", "FontAwesome5Brands:size=10:antialias=true:autohint=true",  };
+static const char *fonts[]          = { "JetBrainsMono-Medium:size=10",
+                			"Font Awesome 5 Free-Solid:size=10",
+					"Font Awesome 5 Free-Regular:size=10",
+					"Font Awesome 5 Brands-Regular:size=10",
+					"Material Design Icons-Regular:size=12"
+
+};
 static char dmenufont[]             = "monospace:size=10";
-static char normbgcolor[]           = "#000000";
-static char normbordercolor[]       = "#000000";
-static char normfgcolor[]           = "#BD93F9";
-static char selfgcolor[]            = "#000000";
-static char selbordercolor[]        = "#4D4D4D";
-static char selbgcolor[]            = "#BD93F9";
-static char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
+static const char *colors[][3]      = {
+	/*               fg         bg         border   */
+	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
 typedef struct {
@@ -65,8 +70,7 @@ static const char *const autostart[] = {
 };
 
 /* tagging */
-static const char *tags[]    = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tagsalt[] = { "", "", "", "", "", "", "", "", "9" };
+static const char *tags[] = { "1: 󰈹","2: 󰔁", "3: 󱃪" , "4: 󱑴","5: 󰪱"  }; 
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -74,7 +78,7 @@ static const Rule rules[] = {
      *	WM_NAME(STRING) = title
     */
     /* class   		     instance     title       	                    tags mask      iscentered   isfloating  isterminal  noswallow     monitor */
-    { "Gimp",                NULL,        NULL,       	    		     1 << 8,             0,           0,        0,         0,        -1 },
+    { "Gimp",                NULL,        NULL,       	    		     1 << 5,             0,           0,        0,         0,        -1 },
     { NULL,                  NULL,        "Microsoft Teams Notification",    0,                  0,           1,        0,         0,        -1 },
     {"Pavucontrol", 	     NULL,        NULL,       		             0,                  1,           1,        0,         0,	     -1 },
     {"kdeconnect.daemon",    NULL,        NULL,                              0,                  1,           3,        0,         0,        -1 },
@@ -125,7 +129,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 
 #include <X11/XF86keysym.h>
@@ -142,10 +146,10 @@ static Key keys[] = {
 	TAGKEYS(			XK_3,		2)
 	TAGKEYS(			XK_4,		3)
 	TAGKEYS(			XK_5,		4)
-	TAGKEYS(			XK_6,		5)
-	TAGKEYS(			XK_7,		6)
-	TAGKEYS(			XK_8,		7)
-	TAGKEYS(			XK_9,		8)
+	// TAGKEYS(			XK_6,		5)
+	// TAGKEYS(			XK_7,		6)
+	// TAGKEYS(			XK_8,		7)
+	// TAGKEYS(			XK_9,		8)
 	{ MODKEY,			XK_0,		view,		{.ui = ~0 } },
 	{ MODKEY|ShiftMask,		XK_0,		tag,		{.ui = ~0 } },
 	{ MODKEY,			XK_minus,	spawn,		SHCMD("pamixer --allow-boost -d 5; kill -44 $(pidof dwmblocks)") },
@@ -156,7 +160,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("sysact") },
 
 	{ MODKEY,			XK_Tab,		view,		{0} },
-	{ MODKEY,                       XK_n,      togglealttag,   {0} }, 
 	/* { MODKEY|ShiftMask,		XK_Tab,		spawn,		SHCMD("") }, */
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY|ShiftMask,		XK_q,		spawn,		SHCMD("sysact") },
@@ -238,14 +241,14 @@ static Key keys[] = {
 	{ MODKEY,			XK_F2,		spawn,		SHCMD("tutorialvids") },
 	{ MODKEY,			XK_F3,		spawn,		SHCMD("displayselect") },
 	{ MODKEY,			XK_F4,		spawn,		SHCMD(TERMINAL " -e pulsemixer; kill -44 $(pidof dwmblocks)") },
-	{ MODKEY,			XK_F5,		xrdb,		{.v = NULL } },
+	// { MODKEY,			XK_F5,		xrdb,		{.v = NULL } },
 	{ MODKEY,			XK_F6,		spawn,		SHCMD("torwrap") },
 	{ MODKEY,			XK_F7,		spawn,		SHCMD("td-toggle") },
 	{ MODKEY,			XK_F8,		spawn,		SHCMD("mw sync") },
 	{ MODKEY,			XK_F9,		spawn,		SHCMD("dmenumount") },
 	{ MODKEY,			XK_F10,		spawn,		SHCMD("dmenuumount") },
 	{ MODKEY,			XK_F11,		spawn,		SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
-	{ MODKEY,			XK_F12,		xrdb,		{.v = NULL } },
+	// { MODKEY,			XK_F12,		xrdb,		{.v = NULL } },
 	{ MODKEY,			XK_space,	zoom,		{0} },
 	{ MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
 
