@@ -15,7 +15,6 @@ I haven't kept `man dwm`/`dwm.1` updated though. PRs welcome on that, lol.
 ## Patches and features
 
 - Clickable statusbar with my build of [dwmblocks](https://github.com/lukesmithxyz/dwmblocks).
-- Reads xresources colors/variables (i.e. works with `pywal`, etc.).
 - scratchpad: Accessible with mod+shift+enter.
 - New layouts: bstack, fibonacci, deck, centered master and more. All bound to keys `super+(shift+)t/y/u/i`.
 - True fullscreen (`super+f`) and prevents focus shifting.
@@ -28,7 +27,6 @@ I haven't kept `man dwm`/`dwm.1` updated though. PRs welcome on that, lol.
 - Latest fixes directly merged from dwm-git master branch
 - Inbuilt Autostart function
 - Support for different layouts for each tag
-- Option to switch between icon based tags and numeric tags
 ## Please install `libxft-bgra`!
 
 This build of dwm does not block color emoji in the status/info bar, so you must install [libxft-bgra](https://aur.archlinux.org/packages/libxft-bgra/) from the AUR, which fixes a libxft color emoji rendering problem, otherwise dwm will crash upon trying to render one. Hopefully this fix will be in all libxft soon enough.
