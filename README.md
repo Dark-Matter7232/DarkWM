@@ -1,11 +1,12 @@
 # Anurag's build of dwm based on Luke's build
-<p align="center">  
-![Desktop](bloat/pic.png)  
-![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)  
-![forthebadge](https://forthebadge.com/images/badges/made-with-crayons.svg)  
+<div align="center">
+![Desktop](bloat/pic.png)
+  
+ 
+![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
+![forthebadge](https://forthebadge.com/images/badges/made-with-crayons.svg)
 </div>
 
-------
 ## FAQ
 
 > What are the bindings?
