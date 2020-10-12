@@ -1,7 +1,7 @@
 # Anurag's build of dwm based on Luke's build
 <div align="center">
-![Desktop](bloat/pic.png)
-  
+
+<img src="https://raw.githubusercontent.com/Dark-Matter7232/DarkWM/master/bloat/pic.png">  
  
 ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 ![forthebadge](https://forthebadge.com/images/badges/made-with-crayons.svg)
