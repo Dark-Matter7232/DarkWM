@@ -1,7 +1,11 @@
 # Anurag's build of dwm based on Luke's build
 <p align="center">
-<a href="https://github.com/Dark-Matter7232/dwm"><img src="trash/cloc.png" height="492" width="702" alt="Archcraft"></a>
-</p>
+![Desktop](bloat/pic.png)
+![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
+![forthebadge](https://forthebadge.com/images/badges/made-with-crayons.svg)
+</div>
+
+------
 ## FAQ
 
 > What are the bindings?
