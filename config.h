@@ -31,7 +31,7 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static const char col_cyan[]        = "#5e3059";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -54,7 +54,7 @@ static const char *const autostart[] = {
 	"sh", "-c", "remaps &", NULL,
 	"sh", "-c", "setbg &", NULL,
 	"sh", "-c", "xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/Xresources &", NULL,
-	"sh", "-c", "picom --config ~/.config/picom/picom.conf &", NULL,
+	"sh", "-c", "picom --config ~/.config/picom/picom.conf --experimental-backends &", NULL,
 	"sh", "-c", "dunst &", NULL,
 	"sh", "-c", "xset r rate 300 50 &", NULL,
 	"sh", "-c", "unclutter &", NULL,
@@ -63,11 +63,12 @@ static const char *const autostart[] = {
 	"sh", "-c", "numlockx &", NULL,
 	"sh", "-c", "mpv --volume=80 ~/.config/fixes/vistashutdown.ogv &", NULL, /*  add a starup chime cuz why not */
 	"sh", "-c", "kdeconnect-indicator &", NULL,
+    "sh", "-c", "imwheel -b 45 &", NULL,
 	NULL /* terminate it */
 };
 
 /* tagging */
-static const char *tags[] = { "1: 󰈹","2: 󰔁", "3: 󱃪" , "4: 󱑴","5: 󰪱", "6: 󰅭"  }; 
+static const char *tags[] = { "1: 󰈹","2: 󰔁", "3: 󱃪" , "4: 󱑴","5: 󰪱", "6: 󰅭"  };
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -153,7 +154,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD(TERMINAL " -e sudo nmtui") },
 	{ MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
 	{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
-	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e lf") },
+	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e ranger") },
 	{ MODKEY|ShiftMask,		XK_r,		spawn,		SHCMD(TERMINAL " -e htop") },
 	{ MODKEY,			XK_t,		setlayout,	{.v = &layouts[0]} }, /* tile */
 	{ MODKEY|ShiftMask,		XK_t,		setlayout,	{.v = &layouts[1]} }, /* bstack */
@@ -190,6 +191,7 @@ static Key keys[] = {
 	{ MODKEY,			XK_z,		incrgaps,	{.i = +3 } },
 	{ MODKEY,			XK_x,		incrgaps,	{.i = -3 } },
 	{ MODKEY,			XK_b,		togglebar,	{0} },
+    { MODKEY,			XK_n,		spawn,		SHCMD(TERMINAL " -e nvim -c VimwikiIndex") },
 	{ MODKEY|ShiftMask,		XK_n,		spawn,		SHCMD(TERMINAL " -e newsboat; pkill -RTMIN+6 dwmblocks") },
 	{ MODKEY,			XK_m,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") },
 	{ MODKEY|ShiftMask,		XK_m,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
@@ -197,6 +199,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_comma,	spawn,		SHCMD("mpc seek 0%") },
 	{ MODKEY,			XK_period,	spawn,		SHCMD("mpc next") },
 	{ MODKEY|ShiftMask,		XK_period,	spawn,		SHCMD("mpc repeat") },
+	{ MODKEY|ShiftMask,		XK_c,	spawn,		SHCMD("code") },
+	{ MODKEY,			XK_c,	spawn,		SHCMD(TERMINAL " -e nvim") },
 	{ MODKEY,			XK_Left,	focusmon,	{.i = -1 } },
 	{ MODKEY|ShiftMask,		XK_Left,	tagmon,		{.i = -1 } },
 	{ MODKEY,			XK_Right,	focusmon,	{.i = +1 } },
@@ -212,7 +216,7 @@ static Key keys[] = {
 	{ MODKEY,			XK_F4,		spawn,		SHCMD(TERMINAL " -e pulsemixer; kill -44 $(pidof dwmblocks)") },
 	{ MODKEY,			XK_F6,		spawn,		SHCMD("torwrap") },
 	{ MODKEY,			XK_F7,		spawn,		SHCMD("td-toggle") },
-	{ MODKEY,			XK_F8,		spawn,		SHCMD("mw sync") },
+	{ MODKEY,			XK_F8,		spawn,		SHCMD("mw -Y") },
 	{ MODKEY,			XK_F9,		spawn,		SHCMD("dmenumount") },
 	{ MODKEY,			XK_F10,		spawn,		SHCMD("dmenuumount") },
 	{ MODKEY,			XK_F11,		spawn,		SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
