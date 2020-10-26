@@ -30,8 +30,8 @@ static char dmenufont[]             = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#5e3059";
+static const char col_gray4[]       = "#FFFFFF";
+static const char col_cyan[]        = "#3F84E2";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -75,8 +75,10 @@ static const Rule rules[] = {
      *	WM_CLASS(STRING) = instance, class
      *	WM_NAME(STRING) = title
     */
-    /* class   		     instance     title       	                    tags mask      iscentered   isfloating  isterminal  noswallow     monitor */
+
+    /* class   		     			     instance               title       	                                                tags mask                        iscentered   isfloating  isterminal  noswallow     monitor          **/
     { "Gimp",                NULL,        NULL,       	    		     1 << 5,             0,           0,        0,         0,        -1 },
+    { "scrcpy",              NULL,        NULL,       	    		     1 << 5,             0,           1,        0,         0,        -1 },
     { NULL,                  NULL,        "Microsoft Teams Notification",    0,                  0,           1,        0,         0,        -1 },
     {"Pavucontrol", 	     NULL,        NULL,       		             0,                  1,           1,        0,         0,	     -1 },
     {"kdeconnect.daemon",    NULL,        NULL,                              0,                  1,           3,        0,         0,        -1 },
@@ -123,8 +125,12 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenui", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
+static const char *playernext[] = { "playerctl", "next", NULL};
+static const char *playerprevious[] = { "playerctl", "previous", NULL};
+static const char *playerpause[] = { "playerctl", "play-pause", NULL};
+static const char *spoticli[] = { "spoticli", "m", NULL};
 
 #include <X11/XF86keysym.h>
 #include "shiftview.c"
@@ -150,8 +156,8 @@ static Key keys[] = {
 	{ MODKEY,			XK_Tab,		view,		{0} },
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY|ShiftMask,		XK_q,		spawn,		SHCMD("sysact") },
-	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD(TERMINAL " -e sudo nmtui") },
+	{ MODKEY,			XK_w,		spawn,		SHCMD("picy") },
+	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("picy") },
 	{ MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
 	{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
 	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e ranger") },
@@ -222,20 +228,19 @@ static Key keys[] = {
 	{ MODKEY,			XK_F11,		spawn,		SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
 	{ MODKEY,			XK_space,	zoom,		{0} },
 	{ MODKEY|ShiftMask,		XK_space,	togglefloating,	{0} },
-	{ 0,				XK_Print,	spawn,		SHCMD("maim ~/Picx/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ 0,				XK_Print,	spawn,		SHCMD("maim ~/Picx/Screenis/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ ShiftMask,			XK_Print,	spawn,		SHCMD("maimpick") },
 	{ MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
-	{ MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("dmenurecord kill") },
+	{ MODKEY|ShiftMask,		XK_Print,	spawn,		SHCMD("picy") },
 	{ MODKEY,			XK_Delete,	spawn,		SHCMD("dmenurecord kill") },
 	{ MODKEY,			XK_Scroll_Lock,	spawn,		SHCMD("killall screenkey || screenkey &") },
 	{ 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 3; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 3; kill -44 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") },
-	{ 0, XF86XK_AudioNext,		spawn,		SHCMD("mpc next") },
-	{ 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") },
-	{ 0, XF86XK_AudioPlay,		spawn,		SHCMD("mpc play") },
-	{ 0, XF86XK_AudioStop,		spawn,		SHCMD("mpc stop") },
+	{ 0, XF86XK_AudioPlay, 		spawn, 		{.v = playerpause}},
+	{ 0, XF86XK_AudioPause, 	spawn, 		{.v = playerpause}},
+	{ 0, XF86XK_AudioNext, 		spawn, 		{.v = playernext}},
+	{ 0, XF86XK_AudioPrev,          spawn, 		{.v = playerprevious}},
 	{ 0, XF86XK_AudioRewind,	spawn,		SHCMD("mpc seek -10") },
 	{ 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seek +10") },
 	{ 0, XF86XK_AudioMedia,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") },
