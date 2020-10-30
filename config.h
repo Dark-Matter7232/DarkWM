@@ -78,7 +78,6 @@ static const Rule rules[] = {
 
     /* class   		     			     instance               title       	                                                tags mask                        iscentered   isfloating  isterminal  noswallow     monitor          **/
     { "Gimp",                NULL,        NULL,       	    		     1 << 5,             0,           0,        0,         0,        -1 },
-    { "scrcpy",              NULL,        NULL,       	    		     1 << 5,             0,           1,        0,         0,        -1 },
     { NULL,                  NULL,        "Microsoft Teams Notification",    0,                  0,           1,        0,         0,        -1 },
     {"Pavucontrol", 	     NULL,        NULL,       		             0,                  1,           1,        0,         0,	     -1 },
     {"kdeconnect.daemon",    NULL,        NULL,                              0,                  1,           3,        0,         0,        -1 },
@@ -130,6 +129,7 @@ static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *playernext[] = { "playerctl", "next", NULL};
 static const char *playerprevious[] = { "playerctl", "previous", NULL};
 static const char *playerpause[] = { "playerctl", "play-pause", NULL};
+static const char *playerstop[] = { "playerctl", "stop", NULL};
 static const char *spoticli[] = { "spoticli", "m", NULL};
 
 #include <X11/XF86keysym.h>
@@ -185,11 +185,11 @@ static Key keys[] = {
 	{ MODKEY,			XK_d,		spawn,          {.v = dmenucmd } },
 	{ MODKEY,			XK_f,		togglefullscr,	{0} },
 	{ MODKEY|ShiftMask,		XK_f,		setlayout,	{.v = &layouts[8]} },
-	{ MODKEY,			XK_g,		shiftview,	{ .i = -1 } },
+	{ MODKEY,			XK_Left,		shiftview,	{ .i = -1 } },
 	{ MODKEY|ShiftMask,		XK_g,		shifttag,	{ .i = -1 } },
 	{ MODKEY,			XK_h,		setmfact,	{.f = -0.05} },
 	{ MODKEY,			XK_l,		setmfact,      	{.f = +0.05} },
-	{ MODKEY,			XK_semicolon,	shiftview,	{ .i = 1 } },
+	{ MODKEY,			XK_Right,	shiftview,	{ .i = 1 } },
 	{ MODKEY|ShiftMask,		XK_semicolon,	shifttag,	{ .i = 1 } },
 	{ MODKEY,			XK_apostrophe,	togglescratch,	{.ui = 1} },
 	{ MODKEY,			XK_Return,	spawn,		{.v = termcmd } },
@@ -241,6 +241,8 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioPause, 	spawn, 		{.v = playerpause}},
 	{ 0, XF86XK_AudioNext, 		spawn, 		{.v = playernext}},
 	{ 0, XF86XK_AudioPrev,          spawn, 		{.v = playerprevious}},
+	{ 0, XF86XK_AudioStop, 		spawn, 		{.v = playerstop}},
+	{ 0, XF86XK_Music, 		spawn, 		{.v = spoticli}},
 	{ 0, XF86XK_AudioRewind,	spawn,		SHCMD("mpc seek -10") },
 	{ 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seek +10") },
 	{ 0, XF86XK_AudioMedia,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") },
@@ -253,7 +255,7 @@ static Key keys[] = {
 	{ 0, XF86XK_ScreenSaver,	spawn,		SHCMD("slock & xset dpms force off; mpc pause; pauseallmpv") },
 	{ 0, XF86XK_TaskPane,		spawn,		SHCMD(TERMINAL " -e htop") },
 	{ 0, XF86XK_Mail,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks") },
-	{ 0, XF86XK_MyComputer,		spawn,		SHCMD(TERMINAL " -e lf /") },
+	{ 0, XF86XK_Explorer,		spawn,		SHCMD(TERMINAL " -e ranger") },
 	{ 0, XF86XK_Launch1,		spawn,		SHCMD("xset dpms force off") },
 	{ 0, XF86XK_TouchpadToggle,	spawn,		SHCMD("(synclient | grep 'TouchpadOff.*1' && synclient TouchpadOff=0) || synclient TouchpadOff=1") },
 	{ 0, XF86XK_TouchpadOff,	spawn,		SHCMD("synclient TouchpadOff=1") },
