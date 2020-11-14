@@ -58,13 +58,16 @@ static const char *const autostart[] = {
 	"sh", "-c", "dunst &", NULL,
 	"sh", "-c", "xset r rate 300 50 &", NULL,
 	"sh", "-c", "unclutter &", NULL,
-	"sh", "-c", "nm-applet --indicator &", NULL,
-	"sh", "-c", "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)", NULL,
-	"sh", "-c", "numlockx &", NULL,
+	"sh", "-c", "xbanish &", NULL,
+	"sh", "-c", "nm-applet &", NULL,
+	"sh", "-c", "/usr/libexec/polkit-mate-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)", NULL,
 	"sh", "-c", "mpv --volume=80 ~/.config/fixes/vistashutdown.ogv &", NULL, /*  add a starup chime cuz why not */
 	"sh", "-c", "kdeconnect-indicator &", NULL,
-        "sh", "-c", "echo 4 > /tmp/libinput_discrete_deltay_multiplier", NULL,
-	NULL /* terminate it */
+        "sh", "-c", "xrandr --output HDMI-A-0 --set TearFree on", NULL,
+	"sh", "-c", "echo 2 > /tmp/libinput_discrete_deltay_multiplier", NULL,
+	"sh", "-c", "xclip &", NULL,
+	"sh", "-c", "clipmenud &", NULL,
+    NULL /* terminate it */
 };
 
 /* tagging */
@@ -131,7 +134,7 @@ static const char *playerprevious[] = { "playerctl", "previous", NULL};
 static const char *playerpause[] = { "playerctl", "play-pause", NULL};
 static const char *playerstop[] = { "playerctl", "stop", NULL};
 static const char *spoticli[] = { "spoticli", "m", NULL};
-
+static const char *clipper[] = { "clipmenu", NULL};
 #include <X11/XF86keysym.h>
 #include "shiftview.c"
 static Key keys[] = {
@@ -155,7 +158,8 @@ static Key keys[] = {
 	// { MODKEY|ShiftMask,		XK_BackSpace,	spawn,		SHCMD("sysact") },
 	{ MODKEY,			XK_Tab,		view,		{0} },
 	{ MODKEY|ShiftMask,		XK_q,		killclient,	{0} },
-	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("picy") },
+	{ MODKEY|ShiftMask,             XK_d, spawn, 		{.v = clipper}},
+        { MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("picy") },
 	// { MODKEY,			XK_e,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") },
 	{ MODKEY|ShiftMask,		XK_e,		spawn,		SHCMD(TERMINAL " -e abook -C ~/.config/abook/abookrc --datafile ~/.config/abook/addressbook") },
 	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e ranger") },
