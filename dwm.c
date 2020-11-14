@@ -229,7 +229,6 @@ static void grabkeys(void);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
-// static void loadxrdb(void);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -305,7 +304,6 @@ static Client *wintosystrayicon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
-// static void xrdb(const Arg *arg);
 static void zoom(const Arg *arg);
 static void autostart_exec(void);
 
@@ -1357,37 +1355,6 @@ killclient(const Arg *arg)
 		XUngrabServer(dpy);
 	}
 }
-
-// void
-// loadxrdb()
-// {
-//   Display *display;
-//   char * resm;
-//   XrmDatabase xrdb;
-//   char *type;
-//   XrmValue value;
-
-//   display = XOpenDisplay(NULL);
-
-//   if (display != NULL) {
-//     resm = XResourceManagerString(display);
-
-//     if (resm != NULL) {
-//       xrdb = XrmGetStringDatabase(resm);
-
-//       if (xrdb != NULL) {
-//         XRDB_LOAD_COLOR("dwm.color0", normbordercolor);
-//         XRDB_LOAD_COLOR("dwm.color8", selbordercolor);
-//         XRDB_LOAD_COLOR("dwm.color0", normbgcolor);
-//         XRDB_LOAD_COLOR("dwm.color4", normfgcolor);
-//         XRDB_LOAD_COLOR("dwm.color0", selfgcolor);
-//         XRDB_LOAD_COLOR("dwm.color4", selbgcolor);
-//       }
-//     }
-//   }
-
-//   XCloseDisplay(display);
-// }
 
 void
 manage(Window w, XWindowAttributes *wa)
@@ -3037,17 +3004,6 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 	return -1;
 }
 
-// void
-// xrdb(const Arg *arg)
-// {
-//   loadxrdb();
-//   int i;
-//   for (i = 0; i < LENGTH(colors); i++)
-//                 scheme[i] = drw_scm_create(drw, colors[i], 3);
-//   focus(NULL);
-//   arrange(NULL);
-// }
-
 Monitor *
 systraytomon(Monitor *m) {
 	Monitor *t;
@@ -3093,8 +3049,6 @@ main(int argc, char *argv[])
 		die("dwm: cannot get xcb connection\n");
 	checkotherwm();
 	    autostart_exec();
-        // XrmInitialize();
-        // loadxrdb();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
